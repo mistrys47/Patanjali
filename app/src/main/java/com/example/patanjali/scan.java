@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.icu.text.UnicodeSetSpanner;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ public class scan extends AppCompatActivity {
 
     Boolean done;
     String data1;
+    AsyncLogin al;
     private IntentIntegrator qrScan;
     public static final List<String> ONE_DIMENSIONAL_FORMATS = Collections.unmodifiableList(
             Arrays.asList(BarcodeFormat.EAN_13.toString()));
@@ -39,7 +41,8 @@ public class scan extends AppCompatActivity {
         qrScan.setBeepEnabled(true);
         qrScan.setCaptureActivity(CaptureActivityPortrait.class);
         qrScan.initiateScan();
-        new AsyncLogin().execute();
+        al = new AsyncLogin();
+        al.execute();
     }
     private class AsyncLogin extends AsyncTask<String, String, String>
     {

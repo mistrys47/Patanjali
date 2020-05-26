@@ -3,6 +3,7 @@ package com.example.patanjali;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -120,6 +123,24 @@ public class add_details extends Fragment {
                         if (b) {
                             Toast.makeText(getContext(), "successfully sold", Toast.LENGTH_LONG).show();
                         }
+                        Cursor x = db.getsolddetails(db1,barcode);
+                        if(x.getCount()>0)
+                        {
+                            while (x.moveToNext()){
+                                q1 = Integer.parseInt(x.getString(0));
+                            }
+                            q1+=Integer.parseInt(q);
+                            b = db.update2(db1,barcode,String.valueOf(q1));
+                            if (b) {
+                                Toast.makeText(getContext(), "updated sold", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        else {
+                            b = db.insert2(db1, barcode, name.getText().toString(), price.getText().toString(), quantity.getText().toString());
+                            if (b) {
+                                Toast.makeText(getContext(), "inserted sold", Toast.LENGTH_LONG).show();
+                            }
+                        }
                     }
                 }
                 else {
@@ -140,4 +161,5 @@ public class add_details extends Fragment {
             return false;
         }
     }
+
 }

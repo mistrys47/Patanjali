@@ -19,7 +19,8 @@ class database extends SQLiteOpenHelper {
     public static final String COL21 = "id";
     public static final String COL22 = "barcode";
     public static final String COL23 = "name";
-    public static final String COL24 = "quantity";
+    public static final String COL24 = "price";
+    public static final String COL25 = "quantity";
 
     public database(Context context) {
         super(context, DATABASE_NAME, null, 1);
@@ -28,7 +29,7 @@ class database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_NAME1 + " (id INTEGER PRIMARY KEY AUTOINCREMENT,barcode TEXT,name TEXT,price TEXT,quantity TEXT)");
-        db.execSQL("CREATE TABLE " + TABLE_NAME2 + " (id INTEGER PRIMARY KEY AUTOINCREMENT,barcode TEXT,name TEXT,quantity TEXT)");
+        db.execSQL("CREATE TABLE " + TABLE_NAME2 + " (id INTEGER PRIMARY KEY AUTOINCREMENT,barcode TEXT,name TEXT,price TEXT,quantity TEXT)");
     }
 
     @Override
@@ -64,6 +65,42 @@ class database extends SQLiteOpenHelper {
     }
     public Cursor getitemdetails(SQLiteDatabase db,String barcode) {
         Cursor cursor = db.query(TABLE_NAME1, new String[]{"name", "price","quantity"}, "barcode=?", new String[]{barcode}, null, null, null);
+        return cursor;
+    }
+    public Cursor getstock(SQLiteDatabase db){
+        Cursor cursor = db.rawQuery("SELECT * FROM item_details ", null);
+        return cursor;
+    }
+    public boolean insert2(SQLiteDatabase db, String barcode, String name, String price, String quantity) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL22, barcode);
+        contentValues.put(COL23, name);
+        contentValues.put(COL24, price);
+        contentValues.put(COL25, quantity);
+        long x = db.insert(TABLE_NAME2, null, contentValues);
+        if (x == -1) {
+            return false;
+        }
+        return true;
+    }
+    public boolean update2(SQLiteDatabase db,String barcode,String quantity){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL25,quantity);
+        long re=db.update(TABLE_NAME2,
+                contentValues,
+                "barcode" + " = ? ",
+                new String[]{barcode});
+        if(re == -1)
+            return false;
+        else
+            return true;
+    }
+    public Cursor getsolddetails(SQLiteDatabase db,String barcode) {
+        Cursor cursor = db.query(TABLE_NAME2, new String[]{"quantity"}, "barcode=?", new String[]{barcode}, null, null, null);
+        return cursor;
+    }
+    public Cursor getsold(SQLiteDatabase db){
+        Cursor cursor = db.rawQuery("SELECT * FROM sold ", null);
         return cursor;
     }
 }
