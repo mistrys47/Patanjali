@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.icu.text.UnicodeSetSpanner;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -32,6 +33,12 @@ public class scan extends AppCompatActivity {
 
         done = false;
         qrScan = new IntentIntegrator(this);
+        qrScan.setPrompt("Scan a barcode");
+        qrScan.setCameraId(0);  // Use a specific camera of the device
+        qrScan.setOrientationLocked(true);
+        qrScan.setBeepEnabled(true);
+        qrScan.setCaptureActivity(CaptureActivityPortrait.class);
+        qrScan.initiateScan();
         new AsyncLogin().execute();
     }
     private class AsyncLogin extends AsyncTask<String, String, String>
@@ -69,6 +76,8 @@ public class scan extends AppCompatActivity {
                         done = true;
                         //Toast.makeText(getApplicationContext(),data1+"in scan",Toast.LENGTH_LONG).show();
                         try {
+//                            FrameLayout f1 = (FrameLayout) findViewById(R.id.fl1);
+//                            f1.removeAllViews();
                             Intent intent = new Intent(this, MainActivity.class);
                             intent.putExtra("barcode", data1);
 

@@ -66,18 +66,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Toast.makeText(getApplicationContext(),"in else",Toast.LENGTH_LONG).show();
             barcode= (String) savedInstanceState.getSerializable("barcode");
         }
+        f1.removeAllViews();
         FragmentManager fragmentManager=getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.fl1,(Fragment) new stock()).addToBackStack(null).commit();
         if(barcode!=null){
             try{
-            Toast.makeText(getApplicationContext(),barcode,Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),barcode,Toast.LENGTH_LONG).show();
             add_details x = new add_details();
             Bundle b = new Bundle();
             b.putString("barcode",barcode);
             x.setArguments(b);
             f1.removeAllViews();
             FragmentManager fragmentManager1=getSupportFragmentManager();
-            fragmentManager1.beginTransaction().replace(R.id.fl1, new add_details()).addToBackStack(null).commit();}
+            fragmentManager1.beginTransaction().replace(R.id.fl1, x).addToBackStack(null).commit();
+            }
             catch (Exception e)
             {
                 Toast.makeText(getApplicationContext(),e+"",Toast.LENGTH_LONG).show();
@@ -143,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FragmentManager fragmentManager=getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.fl1,(Fragment) new sold()).addToBackStack(null).commit();
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
